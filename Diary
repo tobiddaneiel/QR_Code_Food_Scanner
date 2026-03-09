@@ -1,0 +1,6 @@
+Disclaimer, this diary is a bit late in the development but at this time, the website works fairly well for the sign up and the login. The issue is that for the backend there is the DisplayName which is entered as well, now for the sign up page, i am not aware of this time of how to do that but hopefully i should be able to. Also i believe the login should be left as is as that seems functional; logging in with the email and password seems like a very good and possible scenario.
+The food_inventory now shows the food items belonging to the user that is logged in(in theory), still needs to be tested.
+Need to state the functionalities so far()
+The date updated by the server is in this format: December 31, 2020 at 7:00:00 PM UTC-5 (timestamp) while the date being updated by the website when edited is a string in yyyy-mm-dd format. Would like to either clarify that so it is taken note of in the future or make it a single date format so no issues occur with changes
+The website currently only has one page as advised by Adrian Chan, and dashboard page has been removed with it's functions moved to inventory page
+Website got deployed and its been tested with my phone and so far works well
