@@ -58,7 +58,8 @@
   max-width: 300px;
 }
 .form button {
-  padding: 0.5rem 1rem;
+  padding: 0.1rem 0.1rem;
+  max-width: 50%;
   font-size: 1rem;
   color: tomato;
 }
