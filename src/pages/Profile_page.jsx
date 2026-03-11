@@ -15,7 +15,7 @@ function Profile_page() {
           <p><strong>Email:</strong> {user.email}</p>
         </div>
       )}
-      <button id="dashboard-button" onClick={() => navigate("/inventory")}>Go back to Dashboard</button>
+      <button id="inventory-button" onClick={() => navigate("/inventory")}>Go back to Inventory</button>
     </div>
   );
 }

@@ -29,8 +29,7 @@ function FoodInventory() {
 
   const currentUserItems = foodItems.filter(f => f.User === user.uid);
 
-  const [isEditingId, setIsEditingId] = useState(false);
-  const [isExpired, setIsExpired] = useState(false);
+  const [EditingId, setEditingId] = useState(null);
   const [newDate, setNewDate] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [sortingCriterion, setSortingCriterion] = useState("");
@@ -39,7 +38,7 @@ function FoodInventory() {
   const sortedItems = [...currentUserItems].sort((a, b) => {
     let comparison = 0;
     if (sortingCriterion === "Expiration Date") {
-      comparison = new Date(a["Expiration Date"].toDate()) - new Date(b["Expiration Date"].toDate());
+      comparison = new Date(a["Expiration Date"]) - new Date(b["Expiration Date"]);
     } else if (sortingCriterion === "Number of items") {
       comparison = a["Number of items"] - b["Number of items"];
     } else if (sortingCriterion === "Name") {
@@ -61,19 +60,17 @@ function FoodInventory() {
   const handleSaveChange = async(food_id) => {
     try {      
       await updateFoodItem(food_id, "Expiration Date","Number of items", newDate, newNumber);
-      setIsEditingId(false);
-      setNewDate(currentUserItems["Expiration Date"]);
-      setNewNumber(currentUserItems["Number of items"]);
-      setIsEditingId(false);
+      setEditingId(null);
     } catch (error) {
       console.error("Error updating expiration date:", error);
     }
   };
 
-  const handleCancelChange = () => {
-    setNewDate(currentUserItems["Expiration Date"]);
-    setNewNumber(currentUserItems["Number of items"]);
-    setIsEditingId(false);
+  const handleCancelChange = async(food_id) => {
+    const foodItem = currentUserItems.find(item => item.id === food_id);
+    setNewDate(foodItem["Expiration Date"]);
+    setNewNumber(foodItem["Number of items"]);
+    setEditingId(null);
   }
 
   const handleLogout = async () => {
@@ -100,12 +97,12 @@ function FoodInventory() {
             <th><button onClick={() => handleSortingChange("Number of items")}>Number of Items</button></th>
             <th>Food ID</th>
             <th></th>
-            <th>{isEditingId? (
+            <th>{EditingId? (
                   "New Date"
                 ) : (
                 null)}
             </th>
-            <th>{isEditingId? (
+            <th>{EditingId? (
                   "New Number of Items"
                 ) : (
                 null)}
@@ -117,15 +114,16 @@ function FoodInventory() {
           {/* Loop through food items and display each one as a table row */}
           {sortedItems.map((food) => {
 
-            const expiryDate = new Date(food["Expiration Date"]);
-            const today = new Date();
+            const expiryDate = new Date(food["Expiration Date"] + "T00:00:00");
+            const today = new Date().setHours(0,0,0,0);
+
 
             const isExpired = expiryDate < today;
 
             return (
               <tr
                 key={food.id}
-                style={{ backgroundColor: isExpired ? "#ffcccc" : "transparent" }}
+                style={{ backgroundColor: isExpired ? "#f30404" : "transparent" }}
               >
                 {/* Food item name */}
                 <td>{food.Name}</td>
@@ -140,24 +138,28 @@ function FoodInventory() {
                 <td>{food.id}</td>
 
                 <td>
-                  {isEditingId == food.id ? (
+                  {EditingId == food.id ? (
                     <>
                       <button onClick={() => handleSaveChange(food.id)}>
                         Save Change
                       </button>
-                      <button onClick={handleCancelChange}>
+                      <button onClick={() => handleCancelChange(food.id)}>
                         Cancel
                       </button>
                     </>
                   ) : (
-                    <button onClick={() => setIsEditingId(food.id)}>
+                    <button onClick={() => {setEditingId(food.id); 
+                    setNewDate(food["Expiration Date"]); 
+                    setNewNumber(food["Number of items"]);
+                    }}
+                    >
                       Edit
                     </button>
                   )}
                 </td>
 
                 <td>
-                  {isEditingId == food.id ? (
+                  {EditingId == food.id ? (
                     <input
                       type="date"
                       value={newDate}
@@ -167,7 +169,7 @@ function FoodInventory() {
                 </td>
 
                 <td>
-                  {isEditingId == food.id ? (
+                  {EditingId == food.id ? (
                     <input
                       type="number"
                       value={newNumber}
@@ -181,7 +183,6 @@ function FoodInventory() {
           })}
         </tbody>
       </table>
-      <tr></tr>
       {/* Logout + Redirect */}
       <button onClick={handleLogout}>Logout</button>
       <button id="profile-button" onClick={() => navigate("/profile")}>View Profile</button>
