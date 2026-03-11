@@ -16,6 +16,7 @@ function Profile_page() {
         </div>
       )}
       <button id="inventory-button" onClick={() => navigate("/inventory")}>Go back to Inventory</button>
+      <button id="admin-button" onClick={() => navigate("/admin")}>Go to Admin Panel</button>
     </div>
   );
 }

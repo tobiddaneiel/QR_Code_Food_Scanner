@@ -10,7 +10,6 @@ import { useFirestoreCollection } from "../hooks/useFirestoreCollection.jsx";
 
 // Custom authentication hook used to get the currently logged-in user
 import { useAuth } from "../context/AuthContext.jsx";
-import { deleteFoodItem } from "../firebase/deleteFoodItem.js";
 
 // Import Firestore functions (some are not currently used in this component)
 //import {collection, addDoc, doc, setDoc, onSnapshot, query, orderBy } from "firebase/firestore";
@@ -74,14 +73,6 @@ function FoodInventory() {
     setEditingId(null);
   }
 
-  const handleDeleteEntry = async (food_id) => {
-    try {
-      await deleteFoodItem(food_id);
-      setEditingId(null);
-    } catch (error) {
-      console.error("Error deleting food item:", error);
-    }
-  };
 
 
   const handleLogout = async () => {
@@ -115,12 +106,6 @@ function FoodInventory() {
             </th>
             <th>{EditingId? (
                   "New Number of Items"
-                ) : (
-                null)}
-            </th>
-            <th>
-              {EditingId? (
-                  "Delete Entry"
                 ) : (
                 null)}
             </th>
@@ -192,14 +177,7 @@ function FoodInventory() {
                       onChange={(e) => setNewNumber(e.target.value)}
                     />
                   ) : null}
-                </td>
-                <td>
-                  {EditingId == food.id ? (
-                    <button onClick={() => handleDeleteEntry(food.id)}>
-                      Delete Entry
-                    </button>
-                  ) : null}
-                </td>
+                </td>  
               </tr>
             );
 

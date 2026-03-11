@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp_page.jsx";
 import FoodInventory from "./pages/Food_inventory_page.jsx";
 import Home from "./pages/Home_page.jsx";
 import Profile from "./pages/Profile_page.jsx";
+import UserAdminPage from "./pages/User_admin_page.jsx";
 import './App.css'
 
 
@@ -32,6 +33,11 @@ function App() {
           <Route path="/profile" element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          } />
+          <Route path="/admin" element={
+            <ProtectedRoute>
+              <UserAdminPage />
             </ProtectedRoute>
           } />
         </Routes>
