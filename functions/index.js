@@ -7,7 +7,7 @@ const db = admin.firestore();
 
 exports.api = functions.https.onRequest(async (req, res) => {
   try {
-    const { action, collection, documentId, data } = req.body;
+    const { action, collection, documentId, data} =  req.method === "GET" ? req.query : req.body;
 
     if (!collection) {
       return res.status(400).send("Collection required");
@@ -27,33 +27,33 @@ exports.api = functions.https.onRequest(async (req, res) => {
     }
 
     // GET COLLECTION OR FILTERED DOCUMENTS
-  if (action === "get") {
-    // Grab query parameters for filtering
-    const field = req.query.field;
-    const value = req.query.value;
+    if (action === "get") {
+      // Grab query parameters for filtering
+      const field = req.query.field;
+      const value = req.query.value;
 
-    let snapshot;
+      let snapshot;
 
-    if (field && value) {
-      // Filter collection where field equals value
-      snapshot = await db.collection(collection)
-        .where(field, '==', value)
-        .get();
-    } else if (documentId) {
-      // Optional: allow documentId too
-      const doc = await db.collection(collection).doc(documentId).get();
-      return res.status(200).json({ id: doc.id, ...doc.data() });
-    } else {
-      // No filter or documentId → return full collection
-      snapshot = await db.collection(collection).get();
+      if (field && value) {
+        // Filter collection where field equals value
+        snapshot = await db.collection(collection)
+          .where(field, '==', value)
+          .get();
+      } else if (documentId) {
+        // Optional: allow documentId too
+        const doc = await db.collection(collection).doc(documentId).get();
+        return res.status(200).json({ id: doc.id, ...doc.data() });
+      } else {
+        // No filter or documentId → return full collection
+        snapshot = await db.collection(collection).get();
+      }
+
+      const docs = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      return res.status(200).json(docs);
     }
-
-    const docs = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-    return res.status(200).json(docs);
-  }
 
     return res.status(400).send("Invalid action");
 
