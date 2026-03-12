@@ -2,7 +2,7 @@ import { logout } from "../firebase/authService";
 import { useNavigate } from "react-router-dom";
 
 import { deleteFoodItem } from "../firebase/deleteFoodItem.js";
-import { updateFoodItem } from "../firebase/updateFoodItem.js";
+import { updateConsumedDate } from "../firebase/updateConsumedDate.js";
 // Import React hooks (useState and useEffect are imported but not currently used)
 import { useState, useEffect } from "react";
 
@@ -59,7 +59,17 @@ function UserAdminPage() {
         } catch (error) {
           console.error("Error deleting food item:", error);
         }
-      };
+    };
+
+    const handleUpdateConsumedDate = async (food_id) => {
+        try {
+          await updateConsumedDate(food_id);
+          setEditingId(null);
+        } catch (error) {
+          console.error("Error updating consumed date:", error);
+        }
+    };
+
 
     return (
         <div className="admin page">
@@ -72,8 +82,9 @@ function UserAdminPage() {
                     <th><button onClick={() => handleSortingChange("Name")}>Name</button></th>
                     <th><button onClick={() => handleSortingChange("Expiration Date")}>Expiration Date</button></th>
                     <th><button onClick={() => handleSortingChange("Number of items")}>Number of Items</button></th>
-                    <th>Food ID</th>
+                    <th>Consumed Date</th>
                     <th>Created Date</th>
+                    <th></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -101,8 +112,13 @@ function UserAdminPage() {
                         <td>{food["Number of items"]}</td>
 
                         {/* Food ID (for debugging purposes) */}
-                        <td>{food.id}</td>
+                        <td>{food["Consumed Date"]?((food["Consumed Date"]).toDate().toLocaleDateString()):null}</td>
                         <td>{(food["created_at"]).toDate().toLocaleDateString()}</td>
+                        <td>
+                            <button onClick={() => handleUpdateConsumedDate(food.id)}>
+                                Consumed
+                            </button>
+                        </td>
                         <td>
                             <button onClick={() => handleDeleteEntry(food.id)}>
                             Delete Entry

@@ -11,7 +11,6 @@ function Profile_page() {
       <p>This is where user profile information will be displayed.</p>
       {user && (
         <div>
-          <p><strong>Name:</strong> {user.name}</p>
           <p><strong>Email:</strong> {user.email}</p>
         </div>
       )}

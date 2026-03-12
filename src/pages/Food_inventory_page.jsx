@@ -99,16 +99,18 @@ function FoodInventory() {
             <th><button onClick={() => handleSortingChange("Number of items")}>Number of Items</button></th>
             <th>Food ID</th>
             <th></th>
-            <th>{EditingId? (
-                  "New Date"
-                ) : (
-                null)}
-            </th>
-            <th>{EditingId? (
-                  "New Number of Items"
-                ) : (
-                null)}
-            </th>
+            {EditingId? (
+              <th>
+                  New Date
+              </th>) : 
+              (null)
+            }
+            {EditingId? (
+              <th>
+                  New Number of Items
+              </th>) : 
+              (null)
+            }
           </tr>
         </thead>
 
@@ -139,48 +141,48 @@ function FoodInventory() {
                 {/* Food ID (for debugging purposes) */}
                 <td>{food.id}</td>
 
+                {EditingId == food.id ? (  
                 <td>
-                  {EditingId == food.id ? (
-                    <>
-                      <button onClick={() => handleSaveChange(food.id)}>
-                        Save Change
-                      </button>
-                      <button onClick={() => handleCancelChange(food.id)}>
-                        Cancel
-                      </button>
-                    </>
-                  ) : (
-                    <button onClick={() => {setEditingId(food.id); 
-                    setNewDate(food["Expiration Date"]); 
-                    setNewNumber(food["Number of items"]);
-                    }}
-                    >
-                      Edit
+                    <button onClick={() => handleSaveChange(food.id)}>
+                      Save Change
                     </button>
-                  )}
+                    <button onClick={() => handleCancelChange(food.id)}>
+                      Cancel
+                    </button>
                 </td>
-
+                ) : (
                 <td>
-                  {EditingId == food.id ? (
-                    <input
-                      type="date"
-                      value={newDate}
-                      onChange={(e) => setNewDate(e.target.value)}
-                    />
-                  ) : null}
+                <button onClick={() => {setEditingId(food.id); 
+                setNewDate(food["Expiration Date"]); 
+                setNewNumber(food["Number of items"]);
+                }}>
+                Edit
+                </button>
                 </td>
+                )}
+                
+                {EditingId == food.id ? (
                 <td>
-                  {EditingId == food.id ? (
-                    <input
-                      type="number"
-                      value={newNumber}
-                      onChange={(e) => setNewNumber(e.target.value)}
-                    />
-                  ) : null}
-                </td>  
+                <input
+                  type="date"
+                  value={newDate}
+                  onChange={(e) => setNewDate(e.target.value)}
+                />
+                </td>
+                ) : null
+                }
+                {EditingId == food.id ? (
+                <td>
+                <input
+                  type="number"
+                  value={newNumber}
+                  onChange={(e) => setNewNumber(e.target.value)}
+                />
+                </td>
+                ) : null
+                }
               </tr>
             );
-
           })}
         </tbody>
       </table>
