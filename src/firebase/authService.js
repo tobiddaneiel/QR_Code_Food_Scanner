@@ -2,7 +2,8 @@ import { auth } from "./firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  signOut
+  signOut,
+  sendPasswordResetEmail
 } from "firebase/auth";
 
 // SIGN UP
@@ -23,6 +24,11 @@ export const login = async (email, password) => {
     password
   );
   return userCredential.user;
+};
+
+// RESET PASSWORD
+export const resetPassword = async (email) => {
+  return sendPasswordResetEmail(auth, email);
 };
 
 // LOGOUT

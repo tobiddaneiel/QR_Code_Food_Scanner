@@ -41,7 +41,7 @@ function Login() {
           setError("Invalid email format.");
           break;
         default:
-          setError("Login failed. Please try again.");
+          setError("Login failed. Please try again or reset your password.");
       }
     }
   };
@@ -77,6 +77,14 @@ function Login() {
         onClick={() => navigate("/")}
       >
         Return to Home
+      </button>
+
+      {/* Button to navigate to the password reset page */}
+      <button
+        id="reset-password-button"
+        onClick={() => navigate("/reset-password")}
+      >
+        Reset Password
       </button>
     </div>
   );
